@@ -10,6 +10,7 @@ import Foundation
 class Webservice{
     
     func getStocks(completion: @escaping (([Stock]?)-> Void)){
+        
         guard let url = URL(string: "https://island-bramble.glitch.me/stocks") else {
             fatalError("URL is not correct")
         }
@@ -20,10 +21,7 @@ class Webservice{
                 completion(nil)
                 return
             }
-            
-//            let stocks = try? JSONDecoder().decode([Stock].self, from: data)
-//            stocks == nil ? completion(nil) : completion(stocks)
-            
+        
             do {
                 let stocks = try JSONDecoder().decode([Stock].self, from: data)
                 completion(stocks)

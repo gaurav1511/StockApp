@@ -37,26 +37,31 @@ struct StockListViewModel{
 
     var list: Dynamic<[StockViewModel]> = Dynamic([])
     
-    func `init`(){
+    
+    func load(){
         fetchStocks()
     }
     
     private func fetchStocks(){
         
-        Webservice().getStocks { stocks in
+        
+        Webservice().request(url: Constant.stockUrl, expecting: [Stock].self) { result in
             
-            if let stockList = stocks{
+            switch result {
                 
-                let arrayViewModel = stockList.map(StockViewModel.init)
-                
-                self.list.value = arrayViewModel
+            case .success(let result):
+                let arrayViewModel = result.map(StockViewModel.init)
                 self.stocks.onNext(arrayViewModel)
                 self.stocks.onCompleted()
                 
-               
+            case .failure(let error):
+                debugPrint(error)
+                break
+                
             }
             
         }
+        
     }
     
     

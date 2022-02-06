@@ -12,7 +12,9 @@
 import UIKit
 import RxSwift
 
-class ViewController: UIViewController {
+class HomeVC: UIViewController {
+    var coordinator: Coordinator?
+    
     
     
      var stockListViewModel = StockListViewModel()
@@ -32,17 +34,14 @@ class ViewController: UIViewController {
         view.addSubview(tableView)
         tableView.frame = view.bounds
         
-        //stockListViewModel.load()
-        
-        stockListViewModel.list.bind { array in
-            debugPrint("array\(array)")
-        }
+        bindTableDataWithRxSwift()
         
     }
 
     
     func bindTableDataWithRxSwift(){
-
+        
+        stockListViewModel.load()
         stockListViewModel.stocks.bind(to: tableView.rx.items(cellIdentifier: "cell", cellType: UITableViewCell.self)){ row, model, cell in
 
             cell.textLabel?.text = model.symbol
